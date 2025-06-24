@@ -1,11 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Contact{% endblock %}
+{% block title %}{{ 'contact.new.title'|trans }}{% endblock %}
 
 {% block body %}
-    <h1>Create new Contact</h1>
+    <h1>{{ 'contact.new.header'|trans }}</h1>
 
     {{ include('contact/_form.html.twig') }}
 
-    <a href="{{ path('app_contact_index') }}">back to list</a>
+    <a href="{{ path('app_contact_index') }}">{{ 'contact.new.back_to_list'|trans }}</a>
 {% endblock %}

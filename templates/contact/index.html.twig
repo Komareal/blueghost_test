@@ -1,20 +1,20 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Contact index{% endblock %}
+{% block title %}{{ 'contact.index.title'|trans }}{% endblock %}
 
 {% block body %}
-    <h1>Contact index</h1>
+    <h1>{{ 'contact.index.header'|trans }}</h1>
 
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Surname</th>
-                <th>Phone</th>
-                <th>Email</th>
-                <th>Note</th>
-                <th>actions</th>
+                <th>{{ 'contact.field.id'|trans }}</th>
+                <th>{{ 'contact.field.name'|trans }}</th>
+                <th>{{ 'contact.field.surname'|trans }}</th>
+                <th>{{ 'contact.field.phone'|trans }}</th>
+                <th>{{ 'contact.field.email'|trans }}</th>
+                <th>{{ 'contact.field.note'|trans }}</th>
+                <th>{{ 'contact.index.actions'|trans }}</th>
             </tr>
         </thead>
         <tbody>
@@ -27,17 +27,17 @@
                 <td>{{ contact.email }}</td>
                 <td>{{ contact.note }}</td>
                 <td>
-                    <a href="{{ path('app_contact_show', {'id': contact.id}) }}">show</a>
-                    <a href="{{ path('app_contact_edit', {'id': contact.id}) }}">edit</a>
+                    <a href="{{ path('app_contact_show', {'id': contact.id}) }}">{{ 'contact.index.show'|trans }}</a>
+                    <a href="{{ path('app_contact_edit', {'id': contact.id}) }}">{{ 'contact.index.edit'|trans }}</a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="7">no records found</td>
+                <td colspan="7">{{ 'contact.index.no_records'|trans }}</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <a href="{{ path('app_contact_new') }}">Create new</a>
+    <a href="{{ path('app_contact_new') }}">{{ 'contact.index.create_new'|trans }}</a>
 {% endblock %}
