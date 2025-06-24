@@ -52,12 +52,22 @@ final class ContactFactory extends PersistentProxyObjectFactory
     /**
      * Hook for additional initialization after instantiation.
      *
+     *
      * @return static
      */
     protected function initialize(): static
     {
-        // You can add afterInstantiate hooks here if needed.
-        return $this;
+        return $this->afterInstantiate(function (Contact $contact) {
+            static $usedSlugs = [];
+            $baseSlug = Contact::slugify($contact->getName(), $contact->getSurname());
+            $slugCandidate = $baseSlug;
+            $i = 1;
+            while (in_array($slugCandidate, $usedSlugs, true)) {
+                $slugCandidate = $baseSlug . '-' . $i++;
+            }
+            $usedSlugs[] = $slugCandidate;
+            $contact->setSlug($slugCandidate);
+        });
     }
 
     /**

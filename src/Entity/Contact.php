@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\ContactRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\UniqueConstraint;
 use JsonSerializable;
 
 /**
@@ -18,6 +19,8 @@ use JsonSerializable;
  * @property string|null $note Additional notes about the contact (optional)
  */
 #[ORM\Entity(repositoryClass: ContactRepository::class)]
+#[ORM\Table(name: "contact", uniqueConstraints: [new UniqueConstraint(name: "uniq_contact_slug", columns: ["slug"])])]
+#[ORM\HasLifecycleCallbacks]
 class Contact implements JsonSerializable
 {
 
@@ -52,6 +55,12 @@ class Contact implements JsonSerializable
      */
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $phone = null;
+
+    /**
+     * Slug for URL (unique).
+     */
+    #[ORM\Column(length: 255, unique: true)]
+    private ?string $slug = null;
 
     /**
      * Last name of the contact.
@@ -162,6 +171,29 @@ class Contact implements JsonSerializable
     }
 
     /**
+     * Get the slug.
+     *
+     * @return string|null
+     */
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    /**
+     * Set the slug.
+     *
+     * @param string $slug
+     * @return static
+     */
+    public function setSlug(string $slug): static
+    {
+        $this->slug = $slug;
+
+        return $this;
+    }
+
+    /**
      * Get the last name.
      *
      * @return string|null
@@ -192,12 +224,33 @@ class Contact implements JsonSerializable
     public function jsonSerialize(): array
     {
         return [
-            'id' => $this->getId(),
+            'id' => $this->getSlug(),
             'name' => $this->getName(),
             'surname' => $this->getSurname(),
             'phone' => $this->getPhone(),
             'email' => $this->getEmail(),
             'note' => $this->getNote(),
         ];
+    }
+
+    /**
+     * Generate a slug from name and surname (ASCII, not unique).
+     *
+     * @param string $name
+     * @param string $surname
+     * @return string
+     */
+    public static function slugify(string $name, string $surname): string
+    {
+        $text = $name . '-' . $surname;
+        $text = iconv('UTF-8', 'ASCII//TRANSLIT', $text);
+        $text = preg_replace('~[^\\pL\d]+~u', '-', $text);
+        $text = trim($text, '-');
+        $text = strtolower($text);
+        $text = preg_replace('~[^-\w]+~', '', $text);
+        if (empty($text)) {
+            return 'n-a';
+        }
+        return $text;
     }
 }
