@@ -11,11 +11,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/contact')]
 final class ContactController extends AbstractController
 {
 
-    #[Route('/{id}', name: 'app_contact_delete', methods: ['POST'])]
+    #[Route('/contact/{id}', name: 'app_contact_delete', methods: ['POST'])]
     public function delete(Request $request, Contact $contact, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete' . $contact->getId(), $request->getPayload()->getString('_token'))) {
@@ -26,7 +25,7 @@ final class ContactController extends AbstractController
         return $this->redirectToRoute('app_contact_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    #[Route('/{id}/edit', name: 'app_contact_edit', methods: ['GET', 'POST'])]
+    #[Route('/contact/{id}/edit', name: 'app_contact_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Contact $contact, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(ContactForm::class, $contact);
@@ -52,7 +51,7 @@ final class ContactController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_contact_new', methods: ['GET', 'POST'])]
+    #[Route('/contact/new', name: 'app_contact_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $contact = new Contact();
@@ -72,7 +71,7 @@ final class ContactController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_contact_show', methods: ['GET'])]
+    #[Route('/contact/{id}', name: 'app_contact_show', methods: ['GET'])]
     public function show(Contact $contact): Response
     {
         return $this->render('contact/show.html.twig', [
