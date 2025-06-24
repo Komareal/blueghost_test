@@ -9,6 +9,10 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: ContactRepository::class)]
 class Contact
 {
+
+    #[ORM\Column(length: 255)]
+    private ?string $email = null;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -17,17 +21,26 @@ class Contact
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $surname = null;
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $note = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $phone = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $email = null;
+    private ?string $surname = null;
 
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $note = null;
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): static
+    {
+        $this->email = $email;
+
+        return $this;
+    }
 
     public function getId(): ?int
     {
@@ -46,14 +59,14 @@ class Contact
         return $this;
     }
 
-    public function getSurname(): ?string
+    public function getNote(): ?string
     {
-        return $this->surname;
+        return $this->note;
     }
 
-    public function setSurname(string $surname): static
+    public function setNote(?string $note): static
     {
-        $this->surname = $surname;
+        $this->note = $note;
 
         return $this;
     }
@@ -70,26 +83,14 @@ class Contact
         return $this;
     }
 
-    public function getEmail(): ?string
+    public function getSurname(): ?string
     {
-        return $this->email;
+        return $this->surname;
     }
 
-    public function setEmail(string $email): static
+    public function setSurname(string $surname): static
     {
-        $this->email = $email;
-
-        return $this;
-    }
-
-    public function getNote(): ?string
-    {
-        return $this->note;
-    }
-
-    public function setNote(?string $note): static
-    {
-        $this->note = $note;
+        $this->surname = $surname;
 
         return $this;
     }

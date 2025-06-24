@@ -1,36 +1,36 @@
 contact:
-  delete:
-    confirm: "Opravdu chcete kontakt smazat?"
-    button: "Smazat"
-  form:
-    save: "Uložit"
-  edit:
-    title: "Upravit kontakt"
-    header: "Úprava kontaktu"
-    update: "Aktualizovat"
-    back_to_list: "Zpět na seznam"
-  index:
-    title: "Seznam kontaktů"
-    header: "Kontakty"
-    actions: "Akce"
-    show: "Zobrazit"
-    edit: "Upravit"
-    no_records: "Žádné záznamy"
-    create_new: "Vytvořit nový kontakt"
-  field:
-    id: "ID"
-    name: "Jméno"
-    surname: "Příjmení"
-    phone: "Telefon"
-    email: "E-mail"
-    note: "Poznámka"
-  new:
-    title: "Nový kontakt"
-    header: "Vytvořit kontakt"
-    back_to_list: "Zpět na seznam"
-  show:
-    title: "Detail kontaktu"
-    header: "Kontakt"
-    back_to_list: "Zpět na seznam"
-    edit: "Upravit"
+    delete:
+        confirm: "Opravdu chcete kontakt smazat?"
+        button: "Smazat"
+    form:
+        save: "Uložit"
+    edit:
+        title: "Upravit kontakt"
+        header: "Úprava kontaktu"
+        update: "Aktualizovat"
+        back_to_list: "Zpět na seznam"
+    index:
+        title: "Seznam kontaktů"
+        header: "Kontakty"
+        actions: "Akce"
+        show: "Zobrazit"
+        edit: "Upravit"
+        no_records: "Žádné záznamy"
+        create_new: "Vytvořit nový kontakt"
+    field:
+        id: "ID"
+        name: "Jméno"
+        surname: "Příjmení"
+        phone: "Telefon"
+        email: "E-mail"
+        note: "Poznámka"
+    new:
+        title: "Nový kontakt"
+        header: "Vytvořit kontakt"
+        back_to_list: "Zpět na seznam"
+    show:
+        title: "Detail kontaktu"
+        header: "Kontakt"
+        back_to_list: "Zpět na seznam"
+        edit: "Upravit"
 

@@ -10,13 +10,9 @@ use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
  */
 final class ContactFactory extends PersistentProxyObjectFactory
 {
+
     public function __construct()
     {
-    }
-
-    public static function class(): string
-    {
-        return Contact::class;
     }
 
     protected function defaults(): array|callable
@@ -37,8 +33,12 @@ final class ContactFactory extends PersistentProxyObjectFactory
 
     protected function initialize(): static
     {
-        return $this
-            // ->afterInstantiate(function(Contact $contact): void {})
-        ;
+        return $this// ->afterInstantiate(function(Contact $contact): void {})
+            ;
+    }
+
+    public static function class(): string
+    {
+        return Contact::class;
     }
 }
