@@ -26,9 +26,13 @@ Paginace je řešena pomocí AJAX volání, které načítá další kontakty be
 ## Technické poznámky
 
 Základem aplikace je entita `src/Entity/Contact`, kolem které jsou vytvořeny CRUD operace v `src/Controller/ContactController`.
+
 Vzhled dodávají Twig šablony v adresáři `templates`.
+
 Pro správu kontaktů je použit `src/Form/ContactType`, který definuje formulář pro přidání a editaci kontaktů.
+
 `src/Repository/ContactRepository` poskytuje metody pro vyhledávání a filtrování kontaktů.
+
 `src/Factory/ContactFactory` slouží k vytváření testovacích dat pomocí Fakeru.
 
 ## Instalace a spuštění
