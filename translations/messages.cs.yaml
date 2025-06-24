@@ -30,9 +30,3 @@ contact:
         title: "Nový kontakt"
         header: "Vytvořit kontakt"
         back_to_list: "Zpět na seznam"
-    show:
-        title: "Detail kontaktu"
-        header: "Kontakt"
-        back_to_list: "Zpět na seznam"
-        edit: "Upravit"
-
