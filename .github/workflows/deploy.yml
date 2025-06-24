@@ -1,0 +1,63 @@
+name: Symfony Build and Deploy
+
+on:
+  push:
+    branches:
+      - master
+      - development
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, dom, fileinfo, mysql, sqlite, curl, ctype, filter, hash, openssl, pcre, pdo, session, tokenizer, xml
+          coverage: none
+
+      - name: Cache Composer dependencies
+        id: composer-cache
+        uses: actions/cache@v3
+        with:
+          path: vendor
+          key: composer-${{ runner.os }}-${{ hashFiles('composer.lock') }}
+          restore-keys: |
+            composer-${{ runner.os }}-
+
+      - name: Install Composer dependencies
+        run: |
+          composer install --prefer-dist --no-progress --no-suggest --no-interaction
+
+      - name: Set environment variables for production
+        run: |
+          cp .env.prod .env.local
+          echo "DATABASE_URL=${{ secrets.PROD_DATABASE_URL }}" >> .env.local
+          echo "APP_SECRET=$(openssl rand -hex 32)" >> .env.local
+
+      - name: Symfony cache clear and warmup
+        run: |
+          php bin/console cache:clear --env='prod'
+          php bin/console cache:warmup --env='prod' 
+
+      - name: Install Symfony assets
+        run: |
+          php bin/console assets:install public --env='prod'
+
+      - name: Remove dev Composer dependencies
+        run: |
+          composer install --no-dev --optimize-autoloader
+
+      - name: Upload files via FTP
+        uses: SamKirkland/FTP-Deploy-Action@4.3.0
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./
+          server-dir: '/www/domains/bgdemo.komarek.site/'
