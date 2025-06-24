@@ -5,6 +5,8 @@
         currentPage: {{ page|default(1) }},
         loading: false,
         error: '',
+        showNoteDialog: false,
+        dialogNote: '',
         setPageInUrl() {
             const params = new URLSearchParams(window.location.search);
             if (this.currentPage > 1) {
@@ -48,6 +50,17 @@
                 range.push(i);
             }
             return range;
+        },
+        openNoteDialog(note) {
+            this.dialogNote = note || '';
+            this.showNoteDialog = true;
+            this.$nextTick(() => {
+                this.$refs.noteDialog.showModal();
+            });
+        },
+        closeNoteDialog() {
+            this.showNoteDialog = false;
+            this.$refs.noteDialog.close();
         }
     }"
     x-init="fetchContacts(currentPage)"
@@ -90,7 +103,14 @@
                     <td x-text="contact.surname"></td>
                     <td x-text="contact.phone"></td>
                     <td x-text="contact.email"></td>
-                    <td x-text="contact.note && contact.note.length > 30 ? contact.note.slice(0, 30) + '...' : (contact.note || '')"></td>
+                    <td>
+                        <span
+                            x-text="contact.note && contact.note.length > 30 ? contact.note.slice(0, 30) + '...' : (contact.note || '')"
+                            @click="contact.note && openNoteDialog(contact.note)"
+                            style="cursor: pointer; color: blue; text-decoration: underline;"
+                            :title="contact.note && contact.note.length > 30 ? '{{ 'contact.index.open_note'|trans }}' : ''"
+                        ></span>
+                    </td>
                     <td>
                         <a :href="`{{ path('app_contact_edit', {'id': '__ID_REPLACE__'}) }}`.replace('__ID_REPLACE__', contact.id)">
                             {{ 'contact.index.edit'|trans }}
@@ -136,4 +156,10 @@
         >&raquo;
         </button>
     </div>
+    <dialog x-ref="noteDialog" @close="showNoteDialog = false" x-show="showNoteDialog">
+        <form method="dialog" @click.outside="closeNoteDialog()">
+            <p x-text="dialogNote"></p>
+            <button @click.prevent="closeNoteDialog()" type="button">{{ 'contact.index.close'|trans }}</button>
+        </form>
+    </dialog>
 </div>

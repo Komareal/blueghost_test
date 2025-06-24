@@ -17,6 +17,8 @@ contact:
         edit: "Upravit"
         no_records: "Žádné záznamy"
         create_new: "Vytvořit nový kontakt"
+        close: "Zavřít"
+        open_note: "Otevřít celou poznámku"
     field:
         id: "ID"
         name: "Jméno"
