@@ -25,7 +25,7 @@
                 <td>{{ contact.surname }}</td>
                 <td>{{ contact.phone }}</td>
                 <td>{{ contact.email }}</td>
-                <td>{{ contact.note }}</td>
+                <td>{{ contact.note|length > 30 ? contact.note|slice(0, 30) ~ '...' : contact.note }}</td>
                 <td>
                     <a href="{{ path('app_contact_show', {'id': contact.id}) }}">{{ 'contact.index.show'|trans }}</a>
                     <a href="{{ path('app_contact_edit', {'id': contact.id}) }}">{{ 'contact.index.edit'|trans }}</a>
