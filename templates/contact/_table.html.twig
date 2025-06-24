@@ -23,7 +23,7 @@
                 .then(data => {
                         this.contacts = data.data;
                         this.totalPages = data.totalPages;
-                        this.currentPage = data.page;
+                        this.currentPage = parseInt(data.page, 10);
                         this.setPageInUrl();
                 })
                 .catch(() => {
@@ -33,6 +33,21 @@
                 .finally(() => {
                     this.loading = false;
                 });
+        },
+        paginationRange() {
+            let start = Math.max(1, this.currentPage - 4);
+            let end = Math.min(this.totalPages, this.currentPage + 4);
+            if (this.currentPage <= 5) {
+                end = Math.min(this.totalPages, 9);
+            }
+            if (this.currentPage > this.totalPages - 4) {
+                start = Math.max(1, this.totalPages - 8);
+            }
+            let range = [];
+            for (let i = start; i <= end; i++) {
+                range.push(i);
+            }
+            return range;
         }
     }"
     x-init="fetchContacts(currentPage)"
@@ -85,25 +100,23 @@
             </template>
         </tbody>
     </table>
-    <div class="mt-2" x-show="totalPages > 1">
+    <div x-show="totalPages > 1">
         <button
             type="button"
-            class="btn btn-sm btn-secondary"
-            :disabled="currentPage == 1"
+            :disabled="currentPage === 1"
             @click="fetchContacts(1)"
         >&laquo;
         </button>
         <button
             type="button"
-            class="btn btn-sm btn-secondary"
-            :disabled="currentPage == 1"
+            :disabled="currentPage === 1"
             @click="fetchContacts(currentPage - 1)"
         >&lsaquo;
         </button>
-        <template x-for="page in totalPages" :key="page">
+        <template x-for="page in paginationRange()" :key="page">
             <button
                 type="button"
-                :disabled="page == currentPage"
+                :disabled="page === currentPage"
                 @click="fetchContacts(page)"
                 x-text="page"
                 class="btn btn-sm"
@@ -112,15 +125,13 @@
         </template>
         <button
             type="button"
-            class="btn btn-sm btn-secondary"
-            :disabled="currentPage == totalPages"
+            :disabled="currentPage === totalPages"
             @click="fetchContacts(currentPage + 1)"
         >&rsaquo;
         </button>
         <button
             type="button"
-            class="btn btn-sm btn-secondary"
-            :disabled="currentPage == totalPages"
+            :disabled="currentPage === totalPages"
             @click="fetchContacts(totalPages)"
         >&raquo;
         </button>
