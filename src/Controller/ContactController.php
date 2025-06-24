@@ -17,6 +17,14 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 final class ContactController extends AbstractController
 {
 
+    /**
+     * Deletes a contact entity.
+     *
+     * @param Request $request The current request
+     * @param Contact $contact The contact to delete
+     * @param EntityManagerInterface $entityManager The entity manager
+     * @return Response Redirects to the contact index
+     */
     #[Route('/contact/{id}', name: 'app_contact_delete', methods: ['POST'])]
     public function delete(Request $request, Contact $contact, EntityManagerInterface $entityManager): Response
     {
@@ -28,6 +36,14 @@ final class ContactController extends AbstractController
         return $this->redirectToRoute('app_contact_index', [], Response::HTTP_SEE_OTHER);
     }
 
+    /**
+     * Edits an existing contact entity using a form.
+     *
+     * @param Request $request The current request
+     * @param Contact $contact The contact to edit
+     * @param EntityManagerInterface $entityManager The entity manager
+     * @return Response Renders the edit form or redirects on success
+     */
     #[Route('/contact/{id}/edit', name: 'app_contact_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Contact $contact, EntityManagerInterface $entityManager): Response
     {
@@ -46,6 +62,14 @@ final class ContactController extends AbstractController
         ]);
     }
 
+    /**
+     * Displays the contact index page (table is rendered here, but data are fetched via API).
+     * This method validates the page parameter to ensure it is a valid number.
+     *
+     * @param Request $request The current request
+     * @param ValidatorInterface $validator The validator for page parameter
+     * @return Response Renders the contact index page
+     */
     #[Route(name: 'app_contact_index', methods: ['GET'])]
     public function index(Request $request,
         ValidatorInterface $validator,
@@ -66,6 +90,13 @@ final class ContactController extends AbstractController
         ]);
     }
 
+    /**
+     * Creates a new contact entity using a form.
+     *
+     * @param Request $request The current request
+     * @param EntityManagerInterface $entityManager The entity manager
+     * @return Response Renders the new contact form or redirects on success
+     */
     #[Route('/contact/new', name: 'app_contact_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -86,6 +117,14 @@ final class ContactController extends AbstractController
         ]);
     }
 
+    /**
+     * Returns a paginated list of contacts as JSON for table use.
+     *
+     * @param Request $request The current request
+     * @param ContactRepository $contactRepository The contact repository
+     * @param ValidatorInterface $validator The validator for page parameter
+     * @return JsonResponse Paginated contacts data
+     */
     #[Route('/api/table', name: 'app_contact_table', methods: ['GET'])]
     public function table(Request $request,
         ContactRepository $contactRepository,
