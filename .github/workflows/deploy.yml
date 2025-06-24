@@ -3,8 +3,7 @@ name: Symfony Build and Deploy
 on:
   push:
     branches:
-      - master
-      - development
+      - deploy
 
 jobs:
   build-and-deploy:
