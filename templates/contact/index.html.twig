@@ -5,39 +5,7 @@
 {% block body %}
     <h1>{{ 'contact.index.header'|trans }}</h1>
 
-    <table class="table">
-        <thead>
-        <tr>
-            <th>{{ 'contact.field.id'|trans }}</th>
-            <th>{{ 'contact.field.name'|trans }}</th>
-            <th>{{ 'contact.field.surname'|trans }}</th>
-            <th>{{ 'contact.field.phone'|trans }}</th>
-            <th>{{ 'contact.field.email'|trans }}</th>
-            <th>{{ 'contact.field.note'|trans }}</th>
-            <th>{{ 'contact.index.actions'|trans }}</th>
-        </tr>
-        </thead>
-        <tbody>
-            {% for contact in contacts %}
-                <tr>
-                    <td>{{ contact.id }}</td>
-                    <td>{{ contact.name }}</td>
-                    <td>{{ contact.surname }}</td>
-                    <td>{{ contact.phone }}</td>
-                    <td>{{ contact.email }}</td>
-                    <td>{{ contact.note|length > 30 ? contact.note|slice(0, 30) ~ '...' : contact.note }}</td>
-                    <td>
-                        <a href="{{ path('app_contact_show', {'id': contact.id}) }}">{{ 'contact.index.show'|trans }}</a>
-                        <a href="{{ path('app_contact_edit', {'id': contact.id}) }}">{{ 'contact.index.edit'|trans }}</a>
-                    </td>
-                </tr>
-            {% else %}
-                <tr>
-                    <td colspan="7">{{ 'contact.index.no_records'|trans }}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    {% include 'contact/_table.html.twig' with {'page': page} %}
 
     <a href="{{ path('app_contact_new') }}">{{ 'contact.index.create_new'|trans }}</a>
 {% endblock %}

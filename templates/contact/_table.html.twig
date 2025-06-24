@@ -1,0 +1,128 @@
+<div
+    x-data="{
+        contacts: [],
+        totalPages: 1,
+        currentPage: {{ page|default(1) }},
+        loading: false,
+        error: '',
+        setPageInUrl() {
+            const params = new URLSearchParams(window.location.search);
+            if (this.currentPage > 1) {
+                params.set('page', this.currentPage );
+            } else {
+                params.delete('page');
+            }
+            const newUrl = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
+            window.history.replaceState({}, '', newUrl);
+        },
+        fetchContacts(page = 1) {
+            this.loading = true;
+            this.error = '';
+            fetch(`/api/table?page=${page}`)
+                .then(r => r.json())
+                .then(data => {
+                        this.contacts = data.data;
+                        this.totalPages = data.totalPages;
+                        this.currentPage = data.page;
+                        this.setPageInUrl();
+                })
+                .catch(() => {
+                    this.error = 'Error loading data';
+                    this.contacts = [];
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
+        }
+    }"
+    x-init="fetchContacts(currentPage)"
+>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>{{ 'contact.field.name'|trans }}</th>
+            <th>{{ 'contact.field.surname'|trans }}</th>
+            <th>{{ 'contact.field.phone'|trans }}</th>
+            <th>{{ 'contact.field.email'|trans }}</th>
+            <th>{{ 'contact.field.note'|trans }}</th>
+            <th>{{ 'contact.index.actions'|trans }}</th>
+        </tr>
+        </thead>
+        <tbody>
+            <template x-if="loading && contacts.length === 0 && !error">
+                <tr>
+                    <td colspan="7">Loading...</td>
+                </tr>
+            </template>
+            <template x-if="error">
+                <tr>
+                    <td colspan="7" x-text="error"></td>
+                </tr>
+                <tr>
+                    <td colspan="7">
+                        <a href="{{ path('app_contact_index') }}">{{ 'contact.show.back_to_list'|trans }}</a>
+                    </td>
+                </tr>
+            </template>
+            <template x-if="!loading && !error && contacts.length === 0">
+                <tr>
+                    <td colspan="7">{{ 'contact.index.no_records'|trans }}</td>
+                </tr>
+            </template>
+            <template x-for="contact in contacts" :key="contact.id">
+                <tr>
+                    <td x-text="contact.name"></td>
+                    <td x-text="contact.surname"></td>
+                    <td x-text="contact.phone"></td>
+                    <td x-text="contact.email"></td>
+                    <td x-text="contact.note && contact.note.length > 30 ? contact.note.slice(0, 30) + '...' : (contact.note || '')"></td>
+                    <td>
+                        <a :href="`{{ path('app_contact_edit', {'id': '__ID_REPLACE__'}) }}`.replace('__ID_REPLACE__', contact.id)">
+                            {{ 'contact.index.edit'|trans }}
+                        </a>
+                    </td>
+                </tr>
+            </template>
+        </tbody>
+    </table>
+    <div class="mt-2" x-show="totalPages > 1">
+        <button
+            type="button"
+            class="btn btn-sm btn-secondary"
+            :disabled="currentPage == 1"
+            @click="fetchContacts(1)"
+        >&laquo;
+        </button>
+        <button
+            type="button"
+            class="btn btn-sm btn-secondary"
+            :disabled="currentPage == 1"
+            @click="fetchContacts(currentPage - 1)"
+        >&lsaquo;
+        </button>
+        <template x-for="page in totalPages" :key="page">
+            <button
+                type="button"
+                :disabled="page == currentPage"
+                @click="fetchContacts(page)"
+                x-text="page"
+                class="btn btn-sm"
+                :class="{'btn-primary': page === currentPage, 'btn-secondary': page !== currentPage}"
+            ></button>
+        </template>
+        <button
+            type="button"
+            class="btn btn-sm btn-secondary"
+            :disabled="currentPage == totalPages"
+            @click="fetchContacts(currentPage + 1)"
+        >&rsaquo;
+        </button>
+        <button
+            type="button"
+            class="btn btn-sm btn-secondary"
+            :disabled="currentPage == totalPages"
+            @click="fetchContacts(totalPages)"
+        >&raquo;
+        </button>
+    </div>
+</div>

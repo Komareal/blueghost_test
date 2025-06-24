@@ -5,9 +5,10 @@ namespace App\Entity;
 use App\Repository\ContactRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use JsonSerializable;
 
 #[ORM\Entity(repositoryClass: ContactRepository::class)]
-class Contact
+class Contact implements JsonSerializable
 {
 
     #[ORM\Column(length: 255)]
@@ -93,5 +94,17 @@ class Contact
         $this->surname = $surname;
 
         return $this;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+            'surname' => $this->getSurname(),
+            'phone' => $this->getPhone(),
+            'email' => $this->getEmail(),
+            'note' => $this->getNote(),
+        ];
     }
 }
